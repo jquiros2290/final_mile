@@ -1,0 +1,68 @@
+
+<div class="main">
+  <div class="col-lg-8">
+    <table class="table table-striped">
+      <h4>Instate items needing delivery</h4>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Owner</th>
+          <th>Pick Up City</th>
+          <th>Pick Up State</th>
+          <th>Dest. City</th>
+          <th>Dest. State</th>
+          <th>Offer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @instate.each do |item| %>
+          <% if item.user.id != current_user.id %>
+        <tr>
+          <td><a href="/items/<%= item.id %>"><%= item.name.titleize %></a></td>
+          <td><%= item.user.first_name.titleize %> <%= item.user.last_name.titleize %></td>
+          <td><%= item.city.titleize %></td>
+          <td><%= item.state.upcase %></td>
+          <td><%= item.del_city.titleize %></td>
+          <td><%= item.del_state.upcase %></td>
+          <td>$<%= item.offer %></td>
+        </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+    <div class="col-lg-8">
+    <table class="table table-striped">
+      <h4>Out of state items needing delivery</h4>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Owner</th>
+          <th>Pick Up City</th>
+          <th>Pick Up State</th>
+          <th>Dest. City</th>
+          <th>Dest. State</th>
+          <th>Offer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @outstate.each do |item| %>
+          <% if item.delivery_id == nil %>
+            <% if item.user.id != current_user.id %>
+
+        <tr>
+          <td><a href="/items/<%= item.id %>"><%= item.name.titleize %></a></td>
+          <td><%= item.user.first_name.titleize %> <%= item.user.last_name.titleize %></td>
+          <td><%= item.city.titleize %></td>
+          <td><%= item.state.upcase %></td>
+          <td><%= item.del_city.titleize %></td>
+          <td><%= item.del_state.upcase %></td>
+          <td>$<%= item.offer %></td>
+        </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

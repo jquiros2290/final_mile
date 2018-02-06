@@ -1,0 +1,86 @@
+<div class="container">
+	<div class="col-md-8">
+		<form action="/items/<%= @item.id %>" method="post">
+			<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+			<input type="hidden" name="_method" value="patch">
+			<input type="hidden" name="item_id" value="<%= @item.id %>">
+			<input type="hidden" name="item_form[offer]" value="<%= @item.offer %>">
+			<% if @item.user.id != current_user.id %>
+					<button type="submit" name="submit" class="btn btn-success btn-xs">Accept Offer</button>
+			<% end %>
+		</form>
+		<div id="acordeon">
+		    <div class="panel-group" id="accordion">
+		      <div class="panel panel-default">
+		        <div class="panel-heading">
+		          <h4 class="panel-title">
+		            <a data-target="#collapseOne" href="#collapseOne" data-toggle="gsdk-collapse">
+						<h3>
+							<%= @item.name.titleize %> - $<%= @item.offer.floor %><b class="caret"></b>
+						</h3>
+		            </a>
+		          </h4>
+		        </div>
+		        <div id="collapseOne" class="panel-collapse collapse">
+		          <div class="panel-body">
+					<p><strong>Desc:</strong> <%= @item.description %></p>
+					<p><strong><font color="red">Pick Up City:</font></strong> <%= @item.city.titleize %> | <strong><font color="red">Pick Up State:</font></strong> <%= @item.state.upcase %></p>
+					<p><strong><font color="green">Dest City:</font></strong> <%= @item.del_city.titleize %> | <strong><font color="green">Dest State:</font></strong> <%= @item.del_state.upcase %></p>
+					<br>
+		          </div>
+		        </div>
+		      </div>
+		      <div class="panel panel-default">
+		        <div class="panel-heading">
+		          <h4 class="panel-title">
+		            <a data-target="#collapseTwo" href="#collapseTwo" data-toggle="gsdk-collapse">
+		            	<h5>
+		            		<%= @owner.first_name.capitalize %> <%= @owner.last_name.capitalize %><b class="caret"></b>
+		            	</h5>
+		            </a>
+		          </h4>
+		        </div>
+		        <div id="collapseTwo" class="panel-collapse collapse">
+		          <div class="panel-body">
+		          	<p><a href="">Contact Owner</a></p>
+		          	<br>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		</div><!--  end acordeon -->
+	</div>
+	<% if @item.user_id != current_user.id %>
+	<br>
+	<div class="col-md-4">
+			<h4>
+				Not okay with the current offer?
+				<br>
+				<small class="subtitle">Make an offer!</small>
+			</h4>
+
+		<form action="<%= offers_path %>" method="post">
+		<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+		<input type="hidden" name="item_id" value="<%= @item.id %>">
+			<table>
+				<tr>
+				    <td><input type="text" name="offer" placeholder="Your offer" class="form-control" /></td>
+				</tr>
+			</table>
+			<br>
+			<button type="submit" name="submit" class="btn btn-primary">Submit</button>
+	</div>
+	<% end %>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

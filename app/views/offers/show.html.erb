@@ -1,0 +1,73 @@
+<div class="container">
+	<div class="col-md-6">
+		<h3>Pending Offers</h3>
+		<% @offers.each do |offer| %>
+			<% if offer.status == "pending" %>
+				<% if offer.item.user.id == current_user.id %>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th>Original Offer</th>
+								<th>Proposed Offer</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><%= offer.item.name.titleize %></td>
+								<td>$<%= offer.item.offer %></td>
+								<td>$<%= offer.offer.floor %></td>
+								<td>
+									<form action="/decline_offer/<%= offer.id %>" method="post"> 
+										<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+										<input type="hidden" name="_method" value="put">
+										<input type="hidden" name="item_id" value="<%= offer.item.id %>">
+										<input type="hidden" name="offer_id" value="<%= offer.id%>">
+										<button type="submit" name="submit" class="btn btn-danger btn-xs">&#10005 Decline Offer</button>
+									</form> 
+									<form action="/accept_offer/<%= offer.id %>" method="post"> 
+										<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+										<input type="hidden" name="_method" value="put">
+										<button type="submit" name="submit" class="btn btn-success btn-xs">&#10003 Accept Offer</button>
+									</form>					
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				<% end %>
+			<% end %>
+		<% end %>
+	</div>
+	<div class="col-md-6">
+		<h3>Your Offers Pending Disposition</h3>
+		<% @offers.each do |offer| %>
+			<% if offer.offerer_id == current_user.id %>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Item</th>
+							<th>Original Offer</th>
+							<th>Proposed Offer</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><%= offer.item.name.titleize %></td>
+							<td>$<%= offer.item.offer %></td>
+							<td>$<%= offer.offer.floor %></td>
+							<% if offer.status == "declined" %>
+								<td><strong><font color="red"><%= offer.status.upcase %></font></strong></td>
+							<% elsif offer.status == "accepted" %>
+								<td><strong><font color="green"><%= offer.status.upcase %></font></strong>	</td>
+							<% else %>
+								<td><%= offer.status.capitalize %></td>
+							<% end %>
+						</tr>
+					</tbody>
+				</table>
+			<% end %>				
+		<% end %>				
+	</div>
+</div>

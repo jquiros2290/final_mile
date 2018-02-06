@@ -1,0 +1,143 @@
+<div class="container">
+	<div class="col-md-12">
+		<h3>
+			My Listings
+			<br>
+			<small>Items out for bid</small>
+		</h3>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Destination City</th>
+					<th>Destination State</th>
+					<th>Offer</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @user.items.each do |item| %>
+					<% if item.delivery_id == nil %>
+				<tr>
+					<td><%= item.name.titleize %></td>
+					<td><%= item.del_city.titleize %></td>
+					<td><%= item.del_state.upcase %></td>
+					<td>$<%= item.offer %></td>
+				</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+	<br>
+	<div class="col-md-12">
+		<h3>
+			<small>Items out for delivery</small>
+		</h3>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Destination City</th>
+					<th>Destination State</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @user.items.each do |item| %>
+					<% if item.delivery_id != nil %>
+				<tr>
+					<td><%= item.name.titleize %></td>
+					<td><%= item.del_city.titleize %></td>
+					<td><%= item.del_state.upcase %></td>
+					<% if item.delivery.delivered == false %>
+					<td><font color="red">Awaiting Delivery</font></td>
+					<% else %>
+					<td><font color="green">Delivered</font></td>
+					<% end %>
+				</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+	<% if @user.deliveries != [] %>
+	<div class="col-md-12">
+		<br>
+		<hr>
+		<h3>
+			My Deliveries
+			<br>
+			<small>Items to be Delivered</small>
+		</h3>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Destination City</th>
+					<th>Destination State</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @deliveries.each do |delivery| %>
+					<% if delivery.delivered == false %>
+				<tr>
+					<td><%= Item.find(delivery.item_id).name.titleize %></td>
+					<td><%= Item.find(delivery.item_id).del_city.titleize %></td>
+					<td><%= Item.find(delivery.item_id).del_state.upcase %></td>
+					<td>
+						<form action="/cancel_delivery" method="post"> 
+							<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+							<input type="hidden" name="_method" value="patch">
+							<input type="hidden" name="item_id" value="<%= delivery.item_id %>">
+							<input type="hidden" name="delivery_id" value="<%= delivery.id%>">
+							<button type="submit" name="submit" class="btn btn-danger btn-xs">&#10005 Cancel Delivery</button>
+						</form> 
+						<form action="/confirm_delivery" method="post"> 
+							<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+							<input type="hidden" name="_method" value="patch">
+							<input type="hidden" name="item_id" value="<%= delivery.item_id %>">
+							<input type="hidden" name="delivery_id" value="<%= delivery.id%>">
+							<button type="submit" name="submit" class="btn btn-success btn-xs">&#10003 Confirm Delivery</button>
+						</form>					
+					</td>
+				</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+	<br>
+	<div class="col-md-12">
+		<h3>
+			<small>Items Delivered</small>
+		</h3>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Destination City</th>
+					<th>Destination State</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @deliveries.each do |delivery| %>
+					<% if delivery.delivered == true %>
+				<tr>
+					<td><%= Item.find(delivery.item_id).name.titleize %></td>
+					<td><%= Item.find(delivery.item_id).del_city.titleize %></td>
+					<td><%= Item.find(delivery.item_id).del_state.upcase %></td>
+					<td><font color="green">Delivered</font></td>
+				</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+	<% end %>
+</div>
